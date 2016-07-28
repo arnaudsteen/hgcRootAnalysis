@@ -47,7 +47,7 @@ int main(int argc,char** argv)
   char fileName[200];
   for(unsigned int i(0); i<nP; i++){
     
-    sprintf(fileName,"%s%d%s","/data/root/houghEfficiencyProcessor/single_mu-_20GeV_",i,".root");
+    sprintf(fileName,"%s%d%s","single_mu-_20GeV_",i,".root");
     TFile file(fileName,"READ");
     if( file.IsOpen() )
       file.Print();
@@ -79,7 +79,7 @@ int main(int argc,char** argv)
 
   for(unsigned int i(0); i<nP; i++){
     int seed=i+20;
-    sprintf(fileName,"%s%d%s","/data/root/houghEfficiencyProcessor/single_mu-_20GeV_",seed,".root");
+    sprintf(fileName,"%s%d%s","single_mu-_20GeV_",seed,".root");
     TFile file(fileName,"READ");
     if( file.IsOpen() )
       file.Print();

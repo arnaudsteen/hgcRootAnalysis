@@ -62,7 +62,7 @@ int main(int argc,char** argv)
   
   for(unsigned int i(0); i<nP; i++){
     
-    sprintf(fileName,"%s%d%s%d%s","/data/root/ShowerProcessor/single_e-_",(int)energies[i],"GeV_",0,".root");
+    sprintf(fileName,"%s%d%s%d%s","single_e-_",(int)energies[i],"GeV_",0,".root");
     TFile file(fileName,"READ");
     if( file.IsOpen() )
       file.Print();

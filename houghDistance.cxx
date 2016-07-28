@@ -31,7 +31,7 @@ int main(int argc,char** argv)
   hDistance->GetYaxis()->SetTitleOffset(1.1);
   
   char fileName[200];
-  sprintf(fileName,"%s%d%s","/data/root/houghEfficiencyProcessor/single_mu-_20GeV_",atoi(argv[1]),".root");
+  sprintf(fileName,"%s%d%s","single_mu-_20GeV_",atoi(argv[1]),".root");
   TFile file(fileName,"READ");
   if( file.IsOpen() )
     file.Print();

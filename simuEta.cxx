@@ -41,7 +41,7 @@ int main(int argc,char** argv)
   
 
   char fileName[100];
-  sprintf(fileName,"%s%s%s%d%s%d%s","/data/root/SimRoot/single_",particle.c_str(),"_",energy,"GeV_",seed,".root");
+  sprintf(fileName,"%s%s%s%d%s%d%s","single_",particle.c_str(),"_",energy,"GeV_",seed,".root");
   TFile file(fileName,"READ");
   if( file.IsOpen() )
     file.Print();
