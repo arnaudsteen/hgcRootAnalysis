@@ -1,6 +1,6 @@
 mkdir build bin plots
 cd build/ 
-cmake -C $ILCSOFT/ILCSoft.cmake
+cmake -C $ILCSOFT/ILCSoft.cmake ../
 make install
 cd ../
 
