@@ -95,7 +95,8 @@ int main(int argc,char** argv)
   graphE->Draw("psame");
 
   can->Update();
-  can->WaitPrimitive();
+  can->SaveAs("plots/muonPlusJetEfficiency.pdf");
+  can->SaveAs("plots/muonPlusJetEfficiency.C");
   
   
   delete can;

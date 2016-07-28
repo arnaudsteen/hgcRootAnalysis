@@ -134,7 +134,8 @@ int main(int argc,char** argv)
   
   can->cd();
   can->Update();
-  can->WaitPrimitive();
+  can->SaveAs("plots/muonPlusJetDistance.pdf");
+  can->SaveAs("plots/muonPlusJetDistance.C");
   
   
   delete can;

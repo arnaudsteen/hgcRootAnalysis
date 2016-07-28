@@ -54,7 +54,7 @@ int main(int argc,char** argv)
 	std::cout << "---------------------------------------------------" << std::endl;
 	std::cout << "----------------- !!!! ERROR !!!! -----------------" << std::endl;
 	std::cout << "---------------------------------------------------" << std::endl;
-	std::cout << "wrong histogramm name : " << (*it) << "was not found in " << (*jt) << " -> std::abort() "<< std::endl;
+	std::cout << "wrong histogramm name : " << (*jt) << "was not found in " << (*it) << " -> std::abort() "<< std::endl;
 	std::abort();
       }
     }
@@ -63,7 +63,7 @@ int main(int argc,char** argv)
 	std::cout << "---------------------------------------------------" << std::endl;
 	std::cout << "----------------- !!!! ERROR !!!! -----------------" << std::endl;
 	std::cout << "---------------------------------------------------" << std::endl;
-	std::cout << "wrong histogramm name : " << (*it) << "was not found in " << (*jt) << " -> std::abort() "<< std::endl;
+	std::cout << "wrong histogramm name : " << (*jt) << "was not found in " << (*it) << " -> std::abort() "<< std::endl;
 	std::abort();
       }
     }
