@@ -21,8 +21,8 @@ int main(int argc,char** argv)
 {
   std::ostringstream os( std::ostringstream::ate );
 
-  TH2D* h0=new TH2D("h0","",40,0,40,20,0,20);
-  TH2D* h1=new TH2D("h1","",40,0,40,20,0,20);
+  TH2D* h0=new TH2D("h0","",40,0,40,20,-0.5,19.5);
+  TH2D* h1=new TH2D("h1","",40,0,40,20,-0.5,19.5);
   
   int npart=atoi(argv[1]);
   float dCut=15;
