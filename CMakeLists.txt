@@ -40,6 +40,7 @@ add_executable(mergeRootFiles mergeRootFiles.cxx ${sources} ${headers})
 add_executable(muonPlusJetDistance muonPlusJetDistance.cxx ${sources} ${headers})
 add_executable(muonPlusJetEfficiency muonPlusJetEfficiency.cxx ${sources} ${headers})
 add_executable(muonPlusJetAngle muonPlusJetAngle.cxx ${sources} ${headers})
+add_executable(muonPlusJetCylinder muonPlusJetCylinder.cxx ${sources} ${headers})
 target_link_libraries(houghDistance)
 target_link_libraries(houghEfficiency)
 target_link_libraries(simuEta)
@@ -50,8 +51,9 @@ target_link_libraries(mergeRootFiles)
 target_link_libraries(muonPlusJetDistance)
 target_link_libraries(muonPlusJetEfficiency)
 target_link_libraries(muonPlusJetAngle)
+target_link_libraries(muonPlusJetCylinder)
 
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
-install(TARGETS houghDistance houghEfficiency simuEta electronShowerAnalysis energyProfile fsrPlots mergeRootFiles muonPlusJetDistance muonPlusJetEfficiency muonPlusJetAngle DESTINATION ${PROJECT_SOURCE_DIR}/bin)
+install(TARGETS houghDistance houghEfficiency simuEta electronShowerAnalysis energyProfile fsrPlots mergeRootFiles muonPlusJetDistance muonPlusJetEfficiency muonPlusJetAngle muonPlusJetCylinder DESTINATION ${PROJECT_SOURCE_DIR}/bin)
