@@ -20,11 +20,17 @@ int main(int argc,char** argv)
 {
   std::ostringstream os( std::ostringstream::ate );
 
-  TH1D* h[argc-1];
-  TGraph* graph[argc-1];
+  if(argc<3){
+    std::cout << "wrong number of argument -> return" << std::endl;
+    return 0;
+  }
+  int seed=atoi(argv[1]);
+
+  TH1D* h[argc-2];
+  TGraph* graph[argc-2];
   int color=1;
-  for(int i=0; i<argc-1; i++){
-    float npart=atoi(argv[i+1]);
+  for(int i=0; i<argc-2; i++){
+    float npart=atoi(argv[i+2]);
     os.str("");
     os << "h" << npart;
     h[i]=new TH1D(os.str().c_str(),"",360,0,90);
@@ -34,8 +40,8 @@ int main(int argc,char** argv)
     color++;
   }
   
-  for(int i=0; i<argc-1; i++){
-    float npart=atoi(argv[i+1]);
+  for(int i=0; i<argc-2; i++){
+    float npart=atoi(argv[i+2]);
     os.str("");
     os << "muonPlusJet" << npart << "_0.root";
     TFile file(os.str().c_str(),"READ");
@@ -65,9 +71,9 @@ int main(int argc,char** argv)
   int nbin=100;
   int style=20;
   color=1;
-  Double_t x[argc-1][nbin];
-  Double_t y[argc-1][nbin];
-  for(int i=0; i<argc-1; i++){
+  Double_t x[argc-2][nbin];
+  Double_t y[argc-2][nbin];
+  for(int i=0; i<argc-2; i++){
     for(int j=0; j<nbin; j++)
       x[i][j]=(Double_t)(j+1)/nbin;
     h[i]->GetQuantiles(nbin,y[i],x[i]);
@@ -84,7 +90,7 @@ int main(int argc,char** argv)
   }
   
   TH1D* hh=h[0];
-  for(int i=0; i<argc-1; i++){
+  for(int i=0; i<argc-2; i++){
     h[i]->Sumw2();
     h[i]->Scale(1.0/h[i]->Integral());
     if( h[i]->GetBinContent(h[i]->GetMaximumBin()) > hh->GetBinContent(hh->GetMaximumBin()) )
@@ -104,15 +110,15 @@ int main(int argc,char** argv)
 
   can->cd(1);
   hh->Draw("axis");
-  for(int i=0; i<argc-1; i++){
+  for(int i=0; i<argc-2; i++){
     h[i]->GetXaxis()->SetRangeUser(0,22.5);
     h[i]->Draw("histsame");
   }
 
   TLegend *leg=new TLegend(0.6,0.6,0.85,0.85);
   leg->SetFillStyle(0);
-  for(int i=0; i<argc-1; i++){
-    float npart=atoi(argv[i+1]);
+  for(int i=0; i<argc-2; i++){
+    float npart=atoi(argv[i+2]);
     os.str("");
     os << npart << " particles";
     leg->AddEntry(h[i],os.str().c_str(),"l");
@@ -121,12 +127,12 @@ int main(int argc,char** argv)
 
   can->cd(2);
   graph[0]->Draw("ap");
-  for(int i=1; i<argc-1; i++)
+  for(int i=1; i<argc-2; i++)
     graph[i]->Draw("psame");
   TLegend *legQ=new TLegend(0.6,0.4,0.85,0.65);
   legQ->SetFillStyle(0);
-  for(int i=0; i<argc-1; i++){
-    float npart=atoi(argv[i+1]);
+  for(int i=0; i<argc-2; i++){
+    float npart=atoi(argv[i+2]);
     os.str("");
     os << npart << " particles";
     legQ->AddEntry(graph[i],os.str().c_str(),"p");
