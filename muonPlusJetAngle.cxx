@@ -43,7 +43,7 @@ int main(int argc,char** argv)
   for(int i=0; i<argc-2; i++){
     float npart=atoi(argv[i+2]);
     os.str("");
-    os << "muonPlusJet" << npart << "_0.root";
+    os << "muonPlusJet" << npart << "_" << seed << ".root";
     TFile file(os.str().c_str(),"READ");
     if( file.IsOpen() )
       file.Print();
