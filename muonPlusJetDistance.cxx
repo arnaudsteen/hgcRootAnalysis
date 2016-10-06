@@ -2,6 +2,7 @@
 #include <sstream>
 #include <string>
 #include <cmath>
+#include <unistd.h>
 
 #include <TROOT.h>
 #include <TFile.h>
@@ -23,13 +24,14 @@ int main(int argc,char** argv)
     std::cout << "wrong number of argument -> return" << std::endl;
     return 0;
   }
-  int seed=atoi(argv[1]);
+  float energy=atof(argv[1]);
   
   TH1D* h[argc-2];
   TGraph* graph[argc-2];
   int color=1;
   for(int i=0; i<argc-2; i++){
-    float npart=atoi(argv[i+2]);
+    if( color==5 ) color++;
+    int npart=atoi(argv[i+2]);
     os.str("");
     os << "h" << npart;
     h[i]=new TH1D(os.str().c_str(),"",2000,0,1000);
@@ -40,9 +42,9 @@ int main(int argc,char** argv)
   }
   
   for(int i=0; i<argc-2; i++){
-    float npart=atoi(argv[i+2]);
+    int npart=atoi(argv[i+2]);
     os.str("");
-    os << "muonPlusJet" << npart << "_" << seed << ".root";
+    os << energy << "GeVMuon-" << npart << "Particles.root";
     TFile file(os.str().c_str(),"READ");
     if( file.IsOpen() )
       file.Print();
@@ -56,12 +58,16 @@ int main(int argc,char** argv)
     TTree *tree = (TTree*)file.Get("tree");
     float distanceToProjection;
     int ntrack;
+    float simEta;
+    int nhit;
     tree->SetBranchAddress("distanceToProjection",&distanceToProjection);
     tree->SetBranchAddress("ntrack",&ntrack);
+    tree->SetBranchAddress("nhit",&nhit);
+    tree->SetBranchAddress("simEta",&simEta);
     const unsigned nEvts = tree->GetEntries();
     for( unsigned ievt(0); ievt<nEvts; ++ievt ){
       tree->GetEntry(ievt);
-      if(ntrack>0)
+      if(ntrack>0 && nhit>10 && simEta>1.71)
 	h[i]->Fill(distanceToProjection);      
       if( (ievt+1)%1000==0 )
 	std::cout << "Entry " << ievt+1 << std::endl;
@@ -75,15 +81,17 @@ int main(int argc,char** argv)
   for(int i=0; i<argc-2; i++){
     for(int j=0; j<nbin; j++)
       x[i][j]=(Double_t)(j+1)/nbin;
+    if( color==5 ) color++;
     h[i]->GetQuantiles(nbin,y[i],x[i]);
     graph[i]=new TGraph(nbin,y[i],x[i]);
     graph[i]->SetMarkerColor(color);
     graph[i]->SetMarkerStyle(style);
     graph[i]->SetMarkerSize(0.8);
-    graph[i]->GetXaxis()->SetTitle("Distance to projection [mm]");
+    graph[i]->GetXaxis()->SetTitle("d(X_{M,0};X_{T,0}) [mm]");
     graph[i]->GetYaxis()->SetTitle("Fraction of events");
     graph[i]->GetXaxis()->SetRangeUser(0,20);
     graph[i]->GetYaxis()->SetTitleOffset(1.5);
+    graph[i]->GetXaxis()->SetTitleOffset(1.2);
     color++;
     style++;
   }
@@ -95,19 +103,19 @@ int main(int argc,char** argv)
     if( h[i]->GetBinContent(h[i]->GetMaximumBin()) > hh->GetBinContent(hh->GetMaximumBin()) )
       hh=h[i];
   }
-  hh->GetXaxis()->SetTitle("Distance to projection [mm]");
+  hh->GetXaxis()->SetTitle("d(X_{M,0};X_{T,0}) [mm]");
   hh->GetYaxis()->SetTitle("# events");
   hh->GetYaxis()->SetTitleOffset(1.5);
+  hh->GetXaxis()->SetTitleOffset(1.2);
 
   CaliceStyle();
   int argc1=0;
   char* argv1=(char*)"";
   TApplication* app = new TApplication("toto",&argc1,&argv1);
   TCanvas *can=new TCanvas();
-  can->SetWindowSize(1200,600);
-  can->Divide(2,1);
+  can->SetWindowSize(600,600);
+  //can->Divide(2,1);
 
-  can->cd(1);
   hh->Draw("axis");
   for(int i=0; i<argc-2; i++){
     h[i]->GetXaxis()->SetRangeUser(0,20);
@@ -117,33 +125,41 @@ int main(int argc,char** argv)
   TLegend *leg=new TLegend(0.6,0.6,0.85,0.85);
   leg->SetFillStyle(0);
   for(int i=0; i<argc-2; i++){
-    float npart=atoi(argv[i+2]);
+    int npart=atoi(argv[i+2]);
     os.str("");
     os << npart << " particles";
     leg->AddEntry(h[i],os.str().c_str(),"l");
   }
   leg->Draw();
 
-  can->cd(2);
+  can->cd();
+  can->Update();
+  can->SaveAs("plots/muonPlusJetDistance.pdf");
+  can->SaveAs("plots/muonPlusJetDistance.C");
+
+  TCanvas *can2=new TCanvas();
+  can2->SetWindowSize(600,600);
   graph[0]->Draw("ap");
   for(int i=1; i<argc-2; i++)
     graph[i]->Draw("psame");
   TLegend *legQ=new TLegend(0.6,0.4,0.85,0.65);
   legQ->SetFillStyle(0);
   for(int i=0; i<argc-2; i++){
-    float npart=atoi(argv[i+2]);
+    int npart=atoi(argv[i+2]);
     os.str("");
     os << npart << " particles";
     legQ->AddEntry(graph[i],os.str().c_str(),"p");
   }
   legQ->Draw();
   
-  can->cd();
-  can->Update();
-  can->SaveAs("plots/muonPlusJetDistance.pdf");
-  can->SaveAs("plots/muonPlusJetDistance.C");
+  can2->cd();
+  can2->Update();
+  can2->SaveAs("plots/muonPlusJetDistanceQuantile.pdf");
+  can2->SaveAs("plots/muonPlusJetDistanceQuantile.C");
   
   
+  sleep(10);
   delete can;
+  delete can2;
   return 0;
-  }
+}

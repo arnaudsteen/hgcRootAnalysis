@@ -68,7 +68,7 @@ int main(int argc,char** argv)
   text.str("");
   text << "Photon energy = " << energy << " GeV" ;
   
-  input << "single_gamma" << energy << "GeV.root";
+  input << "../HGCALMarlinProcessor/single_gamma_1GeV_10000Events_Seed0.root";
   TFile* fileGamma=new TFile(input.str().c_str(),"READ");
   if( fileGamma->IsOpen() )
     fileGamma->Print();
@@ -98,7 +98,7 @@ int main(int argc,char** argv)
   }
   input.str("");
 
-  input << "multi_fsr_gamma" << energy << "GeV_clustering.root";
+  input << "../HGCALMarlinProcessor/" << energy << "GeVMuon-FSR-10000Events-Seed0.root";
   TFile* fileFSRC=new TFile(input.str().c_str(),"READ");
   if( fileFSRC->IsOpen() )
     fileFSRC->Print();
@@ -138,7 +138,7 @@ int main(int argc,char** argv)
   }
   input.str("");
   
-  input << "multi_fsr_gamma" << energy << "GeV.root";
+  input << "../HGCALMarlinProcessor/" << energy << "GeVMuon-FSR-10000Events-Seed0NC.root";
   TFile* fileFSR=new TFile(input.str().c_str(),"READ");
   if( fileFSR->IsOpen() )
     fileFSR->Print();

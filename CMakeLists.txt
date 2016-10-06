@@ -41,6 +41,9 @@ add_executable(muonPlusJetDistance muonPlusJetDistance.cxx ${sources} ${headers}
 add_executable(muonPlusJetEfficiency muonPlusJetEfficiency.cxx ${sources} ${headers})
 add_executable(muonPlusJetAngle muonPlusJetAngle.cxx ${sources} ${headers})
 add_executable(muonPlusJetCylinder muonPlusJetCylinder.cxx ${sources} ${headers})
+add_executable(tb_h2_082016_1layer tb_h2_082016_1layer.cxx ${sources} ${headers})
+add_executable(pedestalAnalysis pedestalAnalysis.cxx ${sources} ${headers})
+add_executable(mipAnalysis mipAnalysis.cxx ${sources} ${headers})
 target_link_libraries(houghDistance)
 target_link_libraries(houghEfficiency)
 target_link_libraries(simuEta)
@@ -52,8 +55,11 @@ target_link_libraries(muonPlusJetDistance)
 target_link_libraries(muonPlusJetEfficiency)
 target_link_libraries(muonPlusJetAngle)
 target_link_libraries(muonPlusJetCylinder)
+target_link_libraries(tb_h2_082016_1layer)
+target_link_libraries(pedestalAnalysis)
+target_link_libraries(mipAnalysis)
 
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
-install(TARGETS houghDistance houghEfficiency simuEta electronShowerAnalysis energyProfile fsrPlots mergeRootFiles muonPlusJetDistance muonPlusJetEfficiency muonPlusJetAngle muonPlusJetCylinder DESTINATION ${PROJECT_SOURCE_DIR}/bin)
+install(TARGETS houghDistance houghEfficiency simuEta electronShowerAnalysis energyProfile fsrPlots mergeRootFiles muonPlusJetDistance muonPlusJetEfficiency muonPlusJetAngle muonPlusJetCylinder tb_h2_082016_1layer pedestalAnalysis mipAnalysis DESTINATION ${PROJECT_SOURCE_DIR}/bin)

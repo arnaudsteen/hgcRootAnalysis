@@ -2,6 +2,7 @@
 #include <sstream>
 #include <string>
 #include <cmath>
+#include <unistd.h>
 
 #include <TROOT.h>
 #include <TFile.h>
@@ -27,9 +28,9 @@ int main(int argc,char** argv)
   if(argc>=3)
     npartmax=atoi(argv[2]);
   
-  int seed=0;
+  float energy=20;
   if(argc>=4)
-    seed=atoi(argv[3]);
+    energy=atof(argv[3]);
 
   Double_t efficiency[npartmax+1];
   Double_t efficiency_error[npartmax+1];
@@ -38,7 +39,7 @@ int main(int argc,char** argv)
   
   for(int i=0; i<npartmax+1; i++){
     os.str("");
-    os << "muonPlusJet" << i << "_" << seed << ".root";
+    os << energy << "GeVMuon-" << i << "Particles.root";
 
     TFile file(os.str().c_str(),"READ");
     if( file.IsOpen() )
@@ -53,22 +54,29 @@ int main(int argc,char** argv)
     TTree *tree = (TTree*)file.Get("tree");
     float distanceToProjection;
     int ntrack;
+    float simEta;
+    int nhit;
+    int nevent=0;
     efficiency[i]=0.0;
     efficiency_error[i]=0.0;
     nparticle[i]=i;
     nparticle_error[i]=0.0;
     tree->SetBranchAddress("distanceToProjection",&distanceToProjection);
     tree->SetBranchAddress("ntrack",&ntrack);
+    tree->SetBranchAddress("nhit",&nhit);
+    tree->SetBranchAddress("simEta",&simEta);
     const unsigned nEvts = tree->GetEntries();
     for( unsigned ievt(0); ievt<nEvts; ++ievt ){
       tree->GetEntry(ievt);
+      if( nhit>10 && simEta>1.71 )
+	nevent++;
       if(ntrack>0&&distanceToProjection<dCut)
 	efficiency[i]++;
       if( (ievt+1)%1000==0 )
 	std::cout << "Entry " << ievt+1 << std::endl;
     }
-    efficiency[i]/=tree->GetEntries();
-    efficiency_error[i]=std::sqrt( efficiency[i]*(1-efficiency[i])/tree->GetEntries() );
+    efficiency[i]/=nevent;
+    efficiency_error[i]=std::sqrt( efficiency[i]*(1-efficiency[i])/nevent );
   }
 
   TGraphErrors* graphE=new TGraphErrors(npartmax+1,nparticle,efficiency,nparticle_error,efficiency_error);
@@ -79,10 +87,11 @@ int main(int argc,char** argv)
 
   TH1D* hE=new TH1D("hE","",100,-0.5,npartmax+0.5);
   hE->GetXaxis()->SetTitle("# particles");
-  hE->GetYaxis()->SetTitle("Track reco efficiency");
+  hE->GetYaxis()->SetTitle("Muon reconstruction efficiency");
   hE->GetYaxis()->SetTitleOffset(1.4);
   hE->SetMinimum(0.5);
   hE->SetMaximum(1.1);
+
   
   CaliceStyle();
   int argc1=0;
@@ -98,7 +107,7 @@ int main(int argc,char** argv)
   can->SaveAs("plots/muonPlusJetEfficiency.pdf");
   can->SaveAs("plots/muonPlusJetEfficiency.C");
   
-  
+  sleep(10);
   delete can;
   return 0;
 }

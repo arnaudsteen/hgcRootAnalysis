@@ -42,7 +42,7 @@ int main(int argc,char** argv)
   std::stringstream ss(std::stringstream::in | std::stringstream::out);
   ss << std::setprecision(3) ;
 
-  sprintf(fileName,"%s%s%s%d%s","single_",particle.c_str(),"_",(int)energy,"GeV_0.root");
+  sprintf(fileName,"%s%s%s%d%s","/data/root/ShowerProcessor/single_",particle.c_str(),"_",(int)energy,"GeV_0.root");
   TFile *file=new TFile(fileName,"READ");
   if( file->IsOpen() )
     file->Print();
